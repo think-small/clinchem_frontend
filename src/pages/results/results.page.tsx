@@ -9,7 +9,7 @@ const ResultsPage: FC<Props> = (props) => {
   return (
       <section className={"results-page"}>
         {props.results.map(result => (
-            <div>
+            <div key={result.name}>
               <div>{result.name}</div>
               <div>{result.result} {result.units}</div>
               <div>{result.low_Normal} - {result.high_Normal}</div>

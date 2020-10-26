@@ -26,9 +26,9 @@ const TestPage:FC<Props> = (props) => {
         const isPanelOrder = panelOrders.includes(orderName ?? "");
 
         if (orderName && isPanelOrder)
-            result = await apiCaller<IResult>(`https://localhost:44366/api/results/panel/${orderName}`);
+            result = await apiCaller<IResult>(`${process.env.REACT_APP_RESULTS_PANEL_API}/${orderName}`);
         else if (orderName && !isPanelOrder)
-            result = await apiCaller<IResult>(`https://localhost:44366/api/results/${orderName}`);
+            result = await apiCaller<IResult>(`${process.env.REACT_APP_RESULTS_API}/${orderName}`);
         else
             result = {name: "", result: "", high_Normal: "", low_Normal: "", units: ""};
 
@@ -39,7 +39,7 @@ const TestPage:FC<Props> = (props) => {
         if (testToOrder == "")
             return setDoesTestExist(false);
         else {
-            const testExistenceStatus = await apiCaller<Boolean>(`https://localhost:44366/api/tests/exist/${testToOrder}`);
+            const testExistenceStatus = await apiCaller<Boolean>(`${process.env.REACT_APP_TEST_EXIST_API}/${testToOrder}`);
             setDoesTestExist(testExistenceStatus);
         }
     }

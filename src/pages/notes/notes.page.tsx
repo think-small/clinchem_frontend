@@ -14,7 +14,7 @@ const NotesPage: FC<notesProps> = (props) => {
   const [notes, setNotes] = useState<INote | INote[]>([]);
 
   useEffect(() => {
-    apiCaller<INote>('https://localhost:44366/api/notes/1')
+    apiCaller<INote>(`${process.env.REACT_APP_NOTES_API}/1`)
         .then(res => setNotes(res));
   }, [])
 

@@ -14,7 +14,7 @@ const HistoryPage : FC<historyProps> = (props: historyProps) => {
   const [history, setHistory] = useState<IHistory | IHistory[]>([]);
 
   useEffect(() => {
-    apiCaller<IHistory>('https://localhost:44366/api/history/1')
+    apiCaller<IHistory>(`${process.env.REACT_APP_HISTORY_API}/1`)
         .then(res => setHistory(res));
   },[]);
 
