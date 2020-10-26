@@ -8,13 +8,26 @@ type Props = IAppState & ReturnType<typeof mapStateToProps>;
 const ResultsPage: FC<Props> = (props) => {
   return (
       <section className={"results-page"}>
-        {props.results.map(result => (
-            <div key={result.name}>
-              <div>{result.name}</div>
-              <div>{result.result} {result.units}</div>
-              <div>{result.low_Normal} - {result.high_Normal}</div>
-            </div>
-        ))}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Test</th>
+                        <th>Result</th>
+                        <th>Units</th>
+                        <th>Reference Range</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        {props.results.map(({name, result, units, low_Normal, high_Normal}) => (
+                            <tr>
+                                <td>{ name.replaceAll("_", " ") }</td>
+                                <td>{ result }</td>
+                                <td>{ units }</td>
+                                <td>{ low_Normal } - { high_Normal }</td>
+                            </tr>
+                        ))}
+                </tbody>
+            </table>
       </section>)
 };
 
