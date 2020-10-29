@@ -17,7 +17,29 @@ export const caseReducer = (
         return ({
           ...state,
           results: [...state.results, action.payload]
-        })
+        });
+    case "POST_NEW_NOTES":
+      if (Array.isArray(action.payload))
+        return ({
+          ...state,
+          notes: [...state.notes, ...action.payload]
+        });
+      else
+        return ({
+          ...state,
+          notes: [...state.notes, action.payload]
+        });
+    case "POST_NEW_HISTORIES":
+      if (Array.isArray(action.payload))
+        return ({
+          ...state,
+          history: [...state.history, ...action.payload]
+        });
+      else
+        return ({
+          ...state,
+          history: [...state.history, action.payload]
+        });
     case "IGetNotes":
       return {
         ...state,

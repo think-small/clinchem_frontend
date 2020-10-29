@@ -5,17 +5,20 @@ import "./notes.styles.scss";
 import { INote } from "../../models/INote";
 import { apiCaller} from "../../Utils/apiCaller";
 import FormattedText from "../../components/FormattedText/formattedtext.component";
+import {IAppState} from "../../models/IAppState";
+import {connect} from "react-redux";
+import {Dispatch} from "redux";
+import {setNotesActionCreator} from "../../store/actions/action-creators/setNotes";
 
-interface notesProps {
-  notes: INote[]
-}
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
-const NotesPage: FC<notesProps> = (props) => {
-  const [notes, setNotes] = useState<INote | INote[]>([]);
+const NotesPage: FC<Props> = ({notes, addNotesToStore}) => {
 
   useEffect(() => {
-    apiCaller<INote>(`${process.env.REACT_APP_NOTES_API}/1`)
-        .then(res => setNotes(res));
+      if (notes.length == 0) {
+          apiCaller<INote>(`${process.env.REACT_APP_NOTES_API}/1`)
+              .then(notes => addNotesToStore(notes));
+      }
   }, [])
 
   if (Array.isArray(notes)) {
@@ -47,4 +50,14 @@ const NotesPage: FC<notesProps> = (props) => {
   }
 };
 
-export default NotesPage;
+const mapStateToProps = (state: IAppState) => ({
+    notes: state.case.notes
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+        addNotesToStore: (notes: INote | INote[]) => dispatch(setNotesActionCreator(notes))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotesPage);

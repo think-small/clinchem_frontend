@@ -5,17 +5,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { IAppState } from "../../models/IAppState";
 import { IHistory } from "../../models/IHistory";
 import { apiCaller } from "../../Utils/apiCaller";
+import {Dispatch} from "redux";
+import {setHistoriesActionCreator} from "../../store/actions/action-creators/setHistories";
 
-interface historyProps {
-  history: IHistory[]
-}
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
-const HistoryPage : FC<historyProps> = (props: historyProps) => {
-  const [history, setHistory] = useState<IHistory | IHistory[]>([]);
+const HistoryPage : FC<Props> = ({ history, addHistoryToStore }) => {
 
   useEffect(() => {
-    apiCaller<IHistory>(`${process.env.REACT_APP_HISTORY_API}/1`)
-        .then(res => setHistory(res));
+    if (history.length == 0) {
+      apiCaller<IHistory>(`${process.env.REACT_APP_HISTORY_API}/1`)
+          .then(h => addHistoryToStore(h));
+    }
   },[]);
 
   if (Array.isArray(history)) {
@@ -57,4 +58,10 @@ const mapStateToProps = (store: IAppState) => ({
   history: store.case.history,
 });
 
-export default connect(mapStateToProps)(HistoryPage);
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    addHistoryToStore: (histories: IHistory | IHistory[]) => dispatch(setHistoriesActionCreator(histories))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HistoryPage);
